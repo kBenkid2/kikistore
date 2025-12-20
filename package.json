@@ -1,0 +1,46 @@
+{
+  "name": "game-store",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node scripts/check-node.js",
+    "dev": "node scripts/check-setup.js && next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "setup": "node scripts/setup.js",
+    "reset-db": "node scripts/reset-db.js",
+    "migrate": "node scripts/migrate.js",
+    "setup:prod": "node scripts/setup-production.js",
+    "create-admin": "node scripts/create-admin.js",
+    "prepare-deploy": "node scripts/prepare-deploy.js",
+    "cleanup": "node scripts/cleanup-before-git.js",
+    "check-security": "node scripts/check-security.js"
+  },
+  "dependencies": {
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "prisma": "^5.7.1",
+    "@prisma/client": "^5.7.1",
+    "bcryptjs": "^2.4.3",
+    "@types/bcryptjs": "^2.4.6",
+    "jsonwebtoken": "^9.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.303.0",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4"
+  }
+}
+

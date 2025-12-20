@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 6, 78, 119;
+  --background-end-rgb: 8, 47, 73;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+}
+
+/* Ice/Water theme animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-25px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes bubble {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+.animate-bubble {
+  animation: bubble 8s infinite;
+}
+
+/* Water ripple effect */
+.water-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.water-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.water-ripple:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(165, 243, 252, 0.5), 0 0 20px rgba(165, 243, 252, 0.3), 0 0 30px rgba(165, 243, 252, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(165, 243, 252, 0.8), 0 0 30px rgba(165, 243, 252, 0.5), 0 0 40px rgba(165, 243, 252, 0.3);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(20%);
+  }
+  50% {
+    transform: translateX(-20%);
+  }
+  100% {
+    transform: translateX(20%);
+  }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.animate-marquee {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  animation: marquee 10s ease-in-out infinite;
+}
+
+.text-shadow-strong {
+  text-shadow: none;
+  filter: none;
+}
+
+.ice-text {
+  background: linear-gradient(
+    90deg,
+    #e0f2fe 0%, /* Light ice blue */
+    #bae6fd 12.5%, /* Sky blue */
+    #7dd3fc 25%, /* Light cyan */
+    #38bdf8 37.5%, /* Cyan */
+    #0ea5e9 50%, /* Bright blue */
+    #0284c7 62.5%, /* Deep blue */
+    #0369a1 75%, /* Darker blue */
+    #075985 87.5%, /* Deep ice blue */
+    #0c4a6e 100% /* Darkest ice blue */
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ice-shift 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.5)) drop-shadow(0 0 16px rgba(2, 132, 199, 0.3));
+  opacity: 1;
+}
+
+@keyframes ice-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-ice-gradient {
+    background: linear-gradient(135deg, #0c4a6e 0%, #075985 25%, #0369a1 50%, #0284c7 75%, #0ea5e9 100%);
+  }
+  
+  .bg-water-gradient {
+    background: linear-gradient(180deg, #0c4a6e 0%, #075985 50%, #0369a1 100%);
+  }
+}
+
