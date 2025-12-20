@@ -34,7 +34,7 @@ export function rateLimit(req: NextRequest): { allowed: boolean; remaining: numb
 // Cleanup old entries periodically
 setInterval(() => {
   const now = Date.now()
-  for (const [ip, record] of requestCounts.entries()) {
+  for (const [ip, record] of Array.from(requestCounts.entries())) {
     if (now > record.resetTime) {
       requestCounts.delete(ip)
     }

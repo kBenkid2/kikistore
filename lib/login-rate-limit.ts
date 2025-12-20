@@ -77,7 +77,7 @@ export function loginRateLimit(req: NextRequest): LoginRateLimitResult {
 // Cleanup old entries periodically
 setInterval(() => {
   const now = Date.now()
-  for (const [ip, record] of loginAttempts.entries()) {
+  for (const [ip, record] of Array.from(loginAttempts.entries())) {
     if (now > record.resetTime && !record.blocked) {
       loginAttempts.delete(ip)
     }
