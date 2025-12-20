@@ -70,11 +70,13 @@ console.log('✅ Database đã được khởi tạo\n')
 console.log('👤 Đang tạo tài khoản admin...')
 try {
   const env = { ...process.env }
-  execSync('node scripts/setup-admin.js', { stdio: 'inherit', env })
+  // Sử dụng create-admin-auto.js thay vì setup-admin.js (đã bị xóa)
+  execSync('node scripts/create-admin-auto.js', { stdio: 'inherit', env })
   console.log('✅ Tài khoản admin đã được tạo\n')
 } catch (error) {
   console.error('❌ Lỗi khi tạo admin:', error.message)
-  process.exit(1)
+  console.log('💡 Bạn có thể tạo admin thủ công bằng: npm run create-admin')
+  // Không exit, cho phép tiếp tục
 }
 
 // Tạo thư mục uploads

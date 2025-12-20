@@ -27,13 +27,7 @@ export default function Header() {
               {t('home')}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-300 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link
-              href="/admin"
-              className="text-cyan-50 hover:text-white transition-colors relative group font-medium"
-            >
-              {t('admin')}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-300 group-hover:w-full transition-all duration-300"></span>
-            </Link>
+            {/* Admin link đã bị ẩn - chỉ truy cập trực tiếp qua URL bí mật */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setLanguage('vi')}
