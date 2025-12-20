@@ -43,7 +43,7 @@ export function validateFileByMagicBytes(
     bytes[1] === MAGIC_BYTES.jpeg[1] &&
     bytes[2] === MAGIC_BYTES.jpeg[2]
   ) {
-    if (MIME_TYPES.jpeg.includes(mimeType)) {
+    if (MIME_TYPES.jpeg.includes(mimeType as 'image/jpeg' | 'image/jpg')) {
       return { valid: true, detectedType: 'jpeg' }
     }
     return { valid: false, error: 'File signature is JPEG but MIME type does not match' }
@@ -56,7 +56,7 @@ export function validateFileByMagicBytes(
     bytes[2] === MAGIC_BYTES.png[2] &&
     bytes[3] === MAGIC_BYTES.png[3]
   ) {
-    if (MIME_TYPES.png.includes(mimeType)) {
+    if (MIME_TYPES.png.includes(mimeType as 'image/png')) {
       return { valid: true, detectedType: 'png' }
     }
     return { valid: false, error: 'File signature is PNG but MIME type does not match' }
@@ -72,7 +72,7 @@ export function validateFileByMagicBytes(
     // Check for WEBP string at position 8-11
     const webpString = buffer.slice(8, 12).toString('ascii')
     if (webpString === 'WEBP') {
-      if (MIME_TYPES.webp.includes(mimeType)) {
+      if (MIME_TYPES.webp.includes(mimeType as 'image/webp')) {
         return { valid: true, detectedType: 'webp' }
       }
       return { valid: false, error: 'File signature is WebP but MIME type does not match' }
@@ -86,7 +86,7 @@ export function validateFileByMagicBytes(
     bytes[2] === MAGIC_BYTES.gif[2] &&
     (bytes[3] === 0x37 || bytes[3] === 0x39) // GIF87a or GIF89a
   ) {
-    if (MIME_TYPES.gif.includes(mimeType)) {
+    if (MIME_TYPES.gif.includes(mimeType as 'image/gif')) {
       return { valid: true, detectedType: 'gif' }
     }
     return { valid: false, error: 'File signature is GIF but MIME type does not match' }
