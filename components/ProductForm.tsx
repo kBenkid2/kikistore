@@ -73,7 +73,15 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Upload thất bại')
+        const errorData = await response.json()
+        if (errorData.requiresExternalUpload) {
+          toast.error(errorData.error || 'Upload không khả dụng trên Vercel. Vui lòng dùng URL ảnh.', {
+            duration: 5000,
+          })
+        } else {
+          throw new Error(errorData.error || 'Upload thất bại')
+        }
+        return
       }
 
       setImageUrl(data.url)
@@ -216,17 +224,30 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
             </button>
           </div>
         )}
-        <label className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white cursor-pointer hover:bg-gray-600 transition-colors">
-          <Upload className="w-5 h-5" />
-          <span>{uploading ? 'Đang upload...' : imageUrl ? 'Thay đổi ảnh' : 'Chọn ảnh'}</span>
+        <div className="space-y-2">
+          <label className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white cursor-pointer hover:bg-gray-600 transition-colors">
+            <Upload className="w-5 h-5" />
+            <span>{uploading ? 'Đang upload...' : imageUrl ? 'Thay đổi ảnh' : 'Chọn ảnh (Local only)'}</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+              disabled={uploading}
+            />
+          </label>
+          <div className="text-xs text-gray-400 text-center">hoặc</div>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-            disabled={uploading}
+            type="url"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="Paste URL ảnh từ Imgur/imgbb.com..."
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-indigo-500"
           />
-        </label>
+          <p className="text-xs text-gray-400">
+            💡 Trên Vercel: Upload ảnh lên <a href="https://imgur.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Imgur</a> hoặc <a href="https://imgbb.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">imgbb.com</a>, sau đó paste URL vào đây
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center gap-2">

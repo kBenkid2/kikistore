@@ -77,29 +77,57 @@ async function handler(req: NextRequest) {
       )
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads')
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
+    // Check if running on Vercel (serverless - cannot write files)
+    const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV
+    
+    if (isVercel) {
+      // On Vercel, return error with helpful message
+      return NextResponse.json(
+        { 
+          error: 'File upload không khả dụng trên Vercel. Vui lòng upload ảnh lên Imgur hoặc imgbb.com và paste URL vào ô "Image URL" bên dưới.',
+          requiresExternalUpload: true
+        },
+        { status: 400 }
+      )
     }
 
-    // Generate unique filename
-    const timestamp = Date.now()
-    const randomString = Math.random().toString(36).substring(2, 15)
-    const extension = file.name.split('.').pop()
-    const filename = `${timestamp}-${randomString}.${extension}`
-    const filepath = join(uploadsDir, filename)
+    // Local development - save to filesystem
+    try {
+      const uploadsDir = join(process.cwd(), 'public', 'uploads')
+      if (!existsSync(uploadsDir)) {
+        await mkdir(uploadsDir, { recursive: true })
+      }
 
-    // Save file
-    await writeFile(filepath, buffer)
+      // Generate unique filename
+      const timestamp = Date.now()
+      const randomString = Math.random().toString(36).substring(2, 15)
+      const extension = file.name.split('.').pop()
+      const filename = `${timestamp}-${randomString}.${extension}`
+      const filepath = join(uploadsDir, filename)
 
-    // Return URL
-    const url = `/uploads/${filename}`
-    return NextResponse.json({ url })
-  } catch (error) {
+      // Save file
+      await writeFile(filepath, buffer)
+
+      // Return URL
+      const url = `/uploads/${filename}`
+      return NextResponse.json({ url })
+    } catch (writeError: any) {
+      console.error('Error writing file:', writeError)
+      return NextResponse.json(
+        { 
+          error: 'Không thể lưu file. Vui lòng upload ảnh lên Imgur hoặc imgbb.com và paste URL.',
+          requiresExternalUpload: true
+        },
+        { status: 500 }
+      )
+    }
+  } catch (error: any) {
     console.error('Error uploading file:', error)
     return NextResponse.json(
-      { error: 'Failed to upload file' },
+      { 
+        error: error.message || 'Failed to upload file',
+        requiresExternalUpload: true
+      },
       { status: 500 }
     )
   }
