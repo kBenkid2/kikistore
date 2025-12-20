@@ -73,13 +73,12 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
       const data = await response.json()
 
       if (!response.ok) {
-        const errorData = await response.json()
-        if (errorData.requiresExternalUpload) {
-          toast.error(errorData.error || 'Upload không khả dụng trên Vercel. Vui lòng dùng URL ảnh.', {
+        if (data.requiresExternalUpload) {
+          toast.error(data.error || 'Upload không khả dụng trên Vercel. Vui lòng dùng URL ảnh.', {
             duration: 5000,
           })
         } else {
-          throw new Error(errorData.error || 'Upload thất bại')
+          throw new Error(data.error || 'Upload thất bại')
         }
         return
       }
