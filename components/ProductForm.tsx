@@ -13,6 +13,7 @@ interface Product {
   price: string | null
   imageUrl: string | null
   isAvailable: boolean
+  stock: number | null
 }
 
 interface ProductFormProps {
@@ -24,7 +25,8 @@ interface ProductFormProps {
 
 const games = ['Dungeon Quest', 'Arcane Conquest', 'Fabled Legacy', 'Pixel Blade']
 const categories = [
-  { value: 'item', label: 'Item' },
+  { value: 'ult', label: 'Ult' },
+  { value: 'ring', label: 'Ring' },
   { value: 'account', label: 'Account' },
 ]
 
@@ -32,9 +34,10 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
-    category: product?.category || 'item',
+    category: product?.category || 'ult',
     game: product?.game || 'Dungeon Quest',
     price: product?.price || '',
+    stock: product?.stock !== undefined ? product.stock : null,
     isAvailable: product?.isAvailable !== undefined ? product.isAvailable : true,
   })
   const [imageUrl, setImageUrl] = useState(product?.imageUrl || '')
@@ -125,9 +128,10 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
       setFormData({
         name: '',
         description: '',
-        category: 'item',
+        category: 'ult',
         game: 'Dungeon Quest',
         price: '',
+        stock: null,
         isAvailable: true,
       })
       setImageUrl('')
@@ -176,6 +180,30 @@ export default function ProductForm({ token, product, onSuccess, onCancel }: Pro
             </option>
           ))}
         </select>
+      </div>
+
+      <div>
+        <label className="block text-gray-300 mb-2">
+          Số lượng (Stock) {formData.category === 'account' && <span className="text-yellow-400">*</span>}
+        </label>
+        <input
+          type="number"
+          value={formData.stock !== null && formData.stock !== undefined ? formData.stock : ''}
+          onChange={(e) => {
+            const value = e.target.value === '' ? null : parseInt(e.target.value, 10)
+            setFormData({ ...formData, stock: value })
+          }}
+          placeholder={formData.category === 'account' ? 'Nhập số lượng account' : 'Để trống nếu không giới hạn'}
+          min="0"
+          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:border-indigo-500"
+          required={formData.category === 'account'}
+        />
+        {formData.category === 'account' && (
+          <p className="text-xs text-yellow-400 mt-1">⚠️ Bắt buộc nhập số lượng cho Account</p>
+        )}
+        {formData.category !== 'account' && (
+          <p className="text-xs text-gray-400 mt-1">💡 Để trống nếu không giới hạn số lượng</p>
+        )}
       </div>
 
       <div>

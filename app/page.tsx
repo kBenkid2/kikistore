@@ -10,9 +10,20 @@ async function getProducts() {
   try {
     const products = await prisma.product.findMany({
       where: { isAvailable: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [
+        { order: 'asc' },
+        { createdAt: 'desc' },
+      ],
     })
-    return products
+    
+    // Sort by category priority: ult, ring, account
+    const categoryOrder = { ult: 1, ring: 2, account: 3 }
+    return products.sort((a, b) => {
+      const aOrder = categoryOrder[a.category as keyof typeof categoryOrder] || 99
+      const bOrder = categoryOrder[b.category as keyof typeof categoryOrder] || 99
+      if (aOrder !== bOrder) return aOrder - bOrder
+      return 0
+    })
   } catch (error) {
     return []
   }

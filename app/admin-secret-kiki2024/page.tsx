@@ -17,6 +17,8 @@ interface Product {
   price: string | null
   imageUrl: string | null
   isAvailable: boolean
+  stock: number | null
+  order: number
   createdAt: string
   updatedAt: string
 }
@@ -121,6 +123,10 @@ export default function AdminPage() {
     }
   }
 
+  const handleProductReorder = (reorderedProducts: Product[]) => {
+    setProducts(reorderedProducts)
+  }
+
   const handleEdit = (product: Product) => {
     setEditingProduct(product)
   }
@@ -209,6 +215,7 @@ export default function AdminPage() {
                   token={token!}
                   onEdit={handleEdit}
                   onDelete={handleProductDeleted}
+                  onReorder={handleProductReorder}
                 />
               </div>
             </div>

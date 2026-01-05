@@ -21,7 +21,10 @@ async function handler(req: NextRequest) {
   if (req.method === 'GET') {
     try {
       const products = await prisma.product.findMany({
-        orderBy: { createdAt: 'desc' },
+        orderBy: [
+          { order: 'asc' },
+          { createdAt: 'desc' },
+        ],
       })
       return NextResponse.json(products)
     } catch (error) {
@@ -36,11 +39,19 @@ async function handler(req: NextRequest) {
   if (req.method === 'POST') {
     try {
       const body = await req.json()
-      let { name, description, category, game, price, imageUrl, isAvailable } = body
+      let { name, description, category, game, price, imageUrl, isAvailable, stock } = body
 
       if (!name || !category || !game) {
         return NextResponse.json(
           { error: 'Missing required fields' },
+          { status: 400 }
+        )
+      }
+
+      // Validate stock for account category
+      if (category === 'account' && (stock === null || stock === undefined || stock < 0)) {
+        return NextResponse.json(
+          { error: 'Stock is required for account category' },
           { status: 400 }
         )
       }
@@ -52,12 +63,23 @@ async function handler(req: NextRequest) {
       price = sanitizePrice(price)
       
       // Validate category
-      const allowedCategories = ['item', 'account']
+      const allowedCategories = ['ult', 'ring', 'account']
       if (!allowedCategories.includes(category)) {
         return NextResponse.json(
           { error: 'Invalid category' },
           { status: 400 }
         )
+      }
+
+      // Validate stock
+      if (stock !== null && stock !== undefined) {
+        stock = parseInt(stock, 10)
+        if (isNaN(stock) || stock < 0) {
+          return NextResponse.json(
+            { error: 'Invalid stock value' },
+            { status: 400 }
+          )
+        }
       }
 
       // Log admin action
@@ -68,6 +90,13 @@ async function handler(req: NextRequest) {
         game,
       })
 
+      // Get the maximum order value to assign the next order
+      const maxOrderProduct = await prisma.product.findFirst({
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      })
+      const nextOrder = maxOrderProduct ? maxOrderProduct.order + 1 : 0
+
       const product = await prisma.product.create({
         data: {
           name,
@@ -77,6 +106,8 @@ async function handler(req: NextRequest) {
           price,
           imageUrl,
           isAvailable: isAvailable !== undefined ? isAvailable : true,
+          stock: stock !== null && stock !== undefined ? stock : null,
+          order: nextOrder,
         },
       })
 

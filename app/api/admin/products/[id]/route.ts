@@ -47,7 +47,7 @@ async function handler(
   if (req.method === 'PUT') {
     try {
       const body = await req.json()
-      let { name, description, category, game, price, imageUrl, isAvailable } = body
+      let { name, description, category, game, price, imageUrl, isAvailable, stock } = body
 
       // Sanitize all user inputs
       if (name) name = sanitizeProductName(name)
@@ -57,10 +57,29 @@ async function handler(
       
       // Validate category if provided
       if (category) {
-        const allowedCategories = ['item', 'account']
+        const allowedCategories = ['ult', 'ring', 'account']
         if (!allowedCategories.includes(category)) {
           return NextResponse.json(
             { error: 'Invalid category' },
+            { status: 400 }
+          )
+        }
+      }
+
+      // Validate stock for account category
+      if (category === 'account' && (stock === null || stock === undefined || stock < 0)) {
+        return NextResponse.json(
+          { error: 'Stock is required for account category' },
+          { status: 400 }
+        )
+      }
+
+      // Validate stock value
+      if (stock !== null && stock !== undefined) {
+        stock = parseInt(stock, 10)
+        if (isNaN(stock) || stock < 0) {
+          return NextResponse.json(
+            { error: 'Invalid stock value' },
             { status: 400 }
           )
         }
@@ -84,6 +103,7 @@ async function handler(
           ...(price !== undefined && { price }),
           ...(imageUrl !== undefined && { imageUrl }),
           ...(isAvailable !== undefined && { isAvailable }),
+          ...(stock !== undefined && { stock: stock !== null ? stock : null }),
         },
       })
 
