@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { requireAuth } from '@/lib/middleware'
 import { withRateLimit } from '@/lib/rate-limit'
@@ -110,6 +111,10 @@ async function handler(req: NextRequest) {
           order: nextOrder,
         },
       })
+
+      // Revalidate homepage to show new product immediately
+      revalidatePath('/')
+      revalidatePath('/api/products')
 
       return NextResponse.json(product, { status: 201 })
     } catch (error) {

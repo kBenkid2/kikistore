@@ -4,7 +4,7 @@ import Footer from '@/components/Footer'
 import ProductsByGame from '@/components/ProductsByGame'
 import HeroSection from '@/components/HeroSection'
 
-export const revalidate = 60
+export const revalidate = 10
 
 async function getProducts() {
   try {

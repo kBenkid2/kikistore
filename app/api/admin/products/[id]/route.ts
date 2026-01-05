@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { requireAuth } from '@/lib/middleware'
 import { withRateLimit } from '@/lib/rate-limit'
@@ -107,6 +108,10 @@ async function handler(
         },
       })
 
+      // Revalidate homepage to show updated product immediately
+      revalidatePath('/')
+      revalidatePath('/api/products')
+
       return NextResponse.json(product)
     } catch (error) {
       console.error('Error updating product:', error)
@@ -136,6 +141,10 @@ async function handler(
       await prisma.product.delete({
         where: { id },
       })
+
+      // Revalidate homepage to remove deleted product immediately
+      revalidatePath('/')
+      revalidatePath('/api/products')
 
       return NextResponse.json({ success: true })
     } catch (error) {
