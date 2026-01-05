@@ -16,14 +16,8 @@ async function getProducts() {
       ],
     })
     
-    // Sort by category priority: ult, ring, account
-    const categoryOrder = { ult: 1, ring: 2, account: 3 }
-    return products.sort((a, b) => {
-      const aOrder = categoryOrder[a.category as keyof typeof categoryOrder] || 99
-      const bOrder = categoryOrder[b.category as keyof typeof categoryOrder] || 99
-      if (aOrder !== bOrder) return aOrder - bOrder
-      return 0
-    })
+    // Return products in the order set by admin (no additional sorting)
+    return products
   } catch (error) {
     return []
   }

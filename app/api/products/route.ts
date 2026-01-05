@@ -13,16 +13,8 @@ async function handler(req: NextRequest) {
         ],
       })
       
-      // Sort by category priority: ult, ring, account
-      const categoryOrder = { ult: 1, ring: 2, account: 3 }
-      const sortedProducts = products.sort((a, b) => {
-        const aOrder = categoryOrder[a.category as keyof typeof categoryOrder] || 99
-        const bOrder = categoryOrder[b.category as keyof typeof categoryOrder] || 99
-        if (aOrder !== bOrder) return aOrder - bOrder
-        return 0
-      })
-      
-      return NextResponse.json(sortedProducts)
+      // Return products in the order set by admin (no additional sorting)
+      return NextResponse.json(products)
     } catch (error) {
       console.error('Error fetching products:', error)
       return NextResponse.json(
