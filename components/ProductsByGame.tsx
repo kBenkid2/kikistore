@@ -15,6 +15,7 @@ interface Product {
   price: string | null
   imageUrl: string | null
   isAvailable: boolean
+  stock: number | null
   updatedAt: string | Date
 }
 

@@ -12,8 +12,10 @@ export const translations = {
     noProducts: 'Chưa có sản phẩm nào. Vui lòng quay lại sau!',
     contactDiscordBtn: 'Contact',
     category: {
-      item: 'Item',
+      ult: 'Ult',
+      ring: 'Ring',
       account: 'Account',
+      item: 'Item', // Fallback for old data
     },
     status: {
       available: 'Còn hàng',
@@ -40,8 +42,10 @@ export const translations = {
     noProducts: 'No products available. Please come back later!',
     contactDiscordBtn: 'Contact',
     category: {
-      item: 'Item',
+      ult: 'Ult',
+      ring: 'Ring',
       account: 'Account',
+      item: 'Item', // Fallback for old data
     },
     status: {
       available: 'Available',
@@ -70,9 +74,17 @@ export function getTranslation(lang: Language, key: string): string {
       value = translations.vi
       for (const k2 of keys) {
         value = value?.[k2]
+        if (value === undefined) break
       }
       break
     }
+  }
+  
+  // If still not found, return the last key (category name) capitalized
+  if (value === undefined || value === null) {
+    const lastKey = keys[keys.length - 1]
+    // Capitalize first letter
+    return lastKey.charAt(0).toUpperCase() + lastKey.slice(1)
   }
   
   return value || key

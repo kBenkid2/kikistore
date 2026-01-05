@@ -17,6 +17,7 @@ interface Product {
   price: string | null
   imageUrl: string | null
   isAvailable: boolean
+  stock: number | null
   updatedAt: string | Date
 }
 
@@ -145,7 +146,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         <div className="absolute top-1.5 left-1.5 z-10">
           <span className="px-1.5 py-0.5 bg-cyan-600/80 backdrop-blur-sm rounded text-[10px] font-semibold text-white shadow-lg shadow-cyan-900/50">
-            {t(`category.${product.category}`)}
+            {product.category === 'ult' ? 'Ult' : 
+             product.category === 'ring' ? 'Ring' : 
+             product.category === 'account' ? 'Account' : 
+             t(`category.${product.category}`) || product.category}
           </span>
         </div>
         {product.imageUrl && (
@@ -175,6 +179,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             <p className="text-base font-bold text-green-400 mb-2.5">
               {product.price}
             </p>
+          )}
+
+          {/* Stock Badge - Show for account category or when stock is set */}
+          {product.stock !== null && product.stock !== undefined && (
+            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold mb-2 ${
+              product.stock > 0 
+                ? 'bg-green-600/20 text-green-400 border border-green-500/50' 
+                : 'bg-red-600/20 text-red-400 border border-red-500/50'
+            }`}>
+              <span>Stock: {product.stock}</span>
+            </div>
           )}
 
           {/* Status and Update Date - Above Button */}
@@ -244,7 +259,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
             <div className="absolute top-2 left-2">
               <span className="px-2 py-1 bg-cyan-600/90 backdrop-blur-sm rounded text-xs font-semibold text-white shadow-lg">
-                {t(`category.${product.category}`)}
+                {product.category === 'ult' ? 'Ult' : 
+                 product.category === 'ring' ? 'Ring' : 
+                 product.category === 'account' ? 'Account' : 
+                 t(`category.${product.category}`) || product.category}
               </span>
             </div>
           </div>
