@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
@@ -15,6 +15,7 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const scrollPositionRef = useRef<number>(0)
 
   useEffect(() => {
     setMounted(true)
@@ -37,26 +38,35 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
       }
     }
 
+    // Lưu vị trí scroll hiện tại trước khi mở modal
+    scrollPositionRef.current = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+
     // Prevent body scroll when modal is open
     const originalOverflow = document.body.style.overflow
     const originalPosition = document.body.style.position
-    document.body.style.overflow = 'hidden'
-    // Prevent scroll on mobile
-    document.body.style.position = 'fixed'
-    document.body.style.width = '100%'
+    const originalTop = document.body.style.top
+    const originalWidth = document.body.style.width
     
-    // Scroll to top of viewport to ensure modal is visible
-    const scrollY = window.scrollY
-    window.scrollTo(0, 0)
+    // Lưu scroll position và set fixed position để prevent scroll
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollPositionRef.current}px`
+    document.body.style.width = '100%'
 
     document.addEventListener('keydown', handleEscape)
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
+      
+      // Restore lại các style ban đầu
       document.body.style.overflow = originalOverflow
       document.body.style.position = originalPosition
-      document.body.style.width = ''
-      window.scrollTo(0, scrollY)
+      document.body.style.top = originalTop
+      document.body.style.width = originalWidth
+      
+      // Restore lại scroll position
+      window.scrollTo(0, scrollPositionRef.current)
+      
       setImageLoaded(false)
       setImageError(false)
     }
