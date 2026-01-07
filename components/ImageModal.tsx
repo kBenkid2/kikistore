@@ -21,11 +21,44 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
     setMounted(true)
   }, [])
 
-  // Reset image state when modal opens or imageUrl changes
+  // Preload image when modal opens
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && imageUrl) {
       setImageLoaded(false)
       setImageError(false)
+      
+      // Thêm preload link vào head để browser bắt đầu load sớm
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = imageUrl
+      link.setAttribute('fetchpriority', 'high')
+      document.head.appendChild(link)
+      
+      // Preload image để tăng tốc độ load
+      const img = new Image()
+      img.src = imageUrl
+      img.onload = () => {
+        setImageLoaded(true)
+        setImageError(false)
+        // Xóa preload link sau khi load xong
+        document.head.removeChild(link)
+      }
+      img.onerror = () => {
+        setImageError(true)
+        setImageLoaded(false)
+        // Xóa preload link nếu có lỗi
+        if (document.head.contains(link)) {
+          document.head.removeChild(link)
+        }
+      }
+      
+      return () => {
+        // Cleanup: xóa preload link nếu component unmount
+        if (document.head.contains(link)) {
+          document.head.removeChild(link)
+        }
+      }
     }
   }, [isOpen, imageUrl])
 
@@ -143,6 +176,8 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
                 onTouchStart={(e) => e.stopPropagation()}
                 loading="eager"
                 decoding="async"
+                fetchPriority="high"
+                referrerPolicy="no-referrer-when-downgrade"
               />
               {!imageLoaded && !imageError && (
                 <div className="absolute flex items-center justify-center">

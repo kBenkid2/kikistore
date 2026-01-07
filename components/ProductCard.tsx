@@ -99,6 +99,19 @@ export default function ProductCard({ product }: ProductCardProps) {
     const rect = cardRef.current.getBoundingClientRect()
     setPreviewPosition(calculatePreviewPosition(rect))
     setShowPreview(true)
+    
+    // Preload image khi hover để tăng tốc độ khi click
+    if (product.imageUrl) {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = product.imageUrl
+      link.setAttribute('fetchpriority', 'high')
+      // Chỉ thêm nếu chưa có
+      if (!document.querySelector(`link[href="${product.imageUrl}"]`)) {
+        document.head.appendChild(link)
+      }
+    }
   }
 
   useEffect(() => {
@@ -129,6 +142,20 @@ export default function ProductCard({ product }: ProductCardProps) {
           onMouseLeave={() => {
             setShowPreview(false)
             setPreviewPosition(null)
+          }}
+          onTouchStart={() => {
+            // Preload image khi touch trên mobile để tăng tốc độ khi click
+            if (product.imageUrl) {
+              const link = document.createElement('link')
+              link.rel = 'preload'
+              link.as = 'image'
+              link.href = product.imageUrl
+              link.setAttribute('fetchpriority', 'high')
+              // Chỉ thêm nếu chưa có
+              if (!document.querySelector(`link[href="${product.imageUrl}"]`)) {
+                document.head.appendChild(link)
+              }
+            }
           }}
           style={{ 
             touchAction: 'manipulation',
