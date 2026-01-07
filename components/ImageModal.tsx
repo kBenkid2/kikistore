@@ -13,11 +13,20 @@ interface ImageModalProps {
 
 export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModalProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Reset image state when modal opens or imageUrl changes
+  useEffect(() => {
+    if (isOpen) {
+      setImageLoaded(false)
+      setImageError(false)
+    }
+  }, [isOpen, imageUrl])
 
   useEffect(() => {
     if (!isOpen) return
@@ -30,7 +39,11 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
 
     // Prevent body scroll when modal is open
     const originalOverflow = document.body.style.overflow
+    const originalPosition = document.body.style.position
     document.body.style.overflow = 'hidden'
+    // Prevent scroll on mobile
+    document.body.style.position = 'fixed'
+    document.body.style.width = '100%'
     
     // Scroll to top of viewport to ensure modal is visible
     const scrollY = window.scrollY
@@ -41,8 +54,11 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
     return () => {
       document.removeEventListener('keydown', handleEscape)
       document.body.style.overflow = originalOverflow
+      document.body.style.position = originalPosition
+      document.body.style.width = ''
       window.scrollTo(0, scrollY)
       setImageLoaded(false)
+      setImageError(false)
     }
   }, [isOpen, onClose])
 
@@ -76,6 +92,7 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
       <div
         className="w-full h-full overflow-y-auto overflow-x-hidden flex items-center justify-center p-4 md:p-8"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
         style={{
           minHeight: '100vh',
           paddingTop: '2rem',
@@ -83,24 +100,46 @@ export default function ImageModal({ imageUrl, alt, isOpen, onClose }: ImageModa
         }}
       >
         {/* Image Container */}
-        <div className="flex items-center justify-center my-auto">
-          <img
-            src={imageUrl}
-            alt={alt}
-            className={`max-w-full max-h-[calc(100vh-4rem)] w-auto h-auto object-contain ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            } transition-opacity duration-200`}
-            style={{
-              maxWidth: 'min(90vw, 1200px)',
-              maxHeight: 'calc(100vh - 4rem)',
-            }}
-            onLoad={() => setImageLoaded(true)}
-            onClick={(e) => e.stopPropagation()}
-          />
-          {!imageLoaded && (
-            <div className="absolute flex items-center justify-center">
-              <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center my-auto relative">
+          {imageError ? (
+            <div className="flex flex-col items-center justify-center text-white p-8">
+              <div className="w-16 h-16 border-4 border-red-500 rounded-full flex items-center justify-center mb-4">
+                <X className="w-8 h-8 text-red-500" />
+              </div>
+              <p className="text-lg font-semibold mb-2">Failed to load image</p>
+              <p className="text-sm text-gray-300 text-center">Please check your connection and try again</p>
             </div>
+          ) : (
+            <>
+              <img
+                src={imageUrl}
+                alt={alt}
+                className={`max-w-full max-h-[calc(100vh-4rem)] w-auto h-auto object-contain ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                } transition-opacity duration-200`}
+                style={{
+                  maxWidth: 'min(90vw, 1200px)',
+                  maxHeight: 'calc(100vh - 4rem)',
+                }}
+                onLoad={() => {
+                  setImageLoaded(true)
+                  setImageError(false)
+                }}
+                onError={() => {
+                  setImageError(true)
+                  setImageLoaded(false)
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                loading="eager"
+                decoding="async"
+              />
+              {!imageLoaded && !imageError && (
+                <div className="absolute flex items-center justify-center">
+                  <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

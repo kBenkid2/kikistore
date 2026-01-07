@@ -130,6 +130,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             setShowPreview(false)
             setPreviewPosition(null)
           }}
+          style={{ 
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
+          }}
         >
           {product.imageUrl ? (
             <Image
