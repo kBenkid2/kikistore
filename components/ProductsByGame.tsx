@@ -87,7 +87,7 @@ export default function ProductsByGame({ productsByGame, games }: ProductsByGame
         productsByGame[selectedGame] && productsByGame[selectedGame].length > 0 ? (
           <div>
             <h2 className="text-lg font-bold bg-gradient-to-r from-cyan-200 to-cyan-100 bg-clip-text text-transparent mb-3">{selectedGame}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 items-stretch">
               {productsByGame[selectedGame].map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -125,7 +125,7 @@ export default function ProductsByGame({ productsByGame, games }: ProductsByGame
                 </button>
                 
                 {isExpanded && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 items-stretch">
                     {gameProducts.map((product) => (
                       <ProductCard key={product.id} product={product} />
                     ))}
