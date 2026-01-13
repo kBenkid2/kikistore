@@ -6,8 +6,21 @@ import { useLanguage } from './LanguageProvider'
 import { getTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
+// Facebook Icon Component
+const FacebookIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+  </svg>
+)
+
 export default function Footer() {
   const discordUsername = 'elainedna'
+  const facebookUrl = 'https://www.facebook.com/van.vu.58402'
   const { language } = useLanguage()
   const t = (key: string) => getTranslation(language, key)
   const [copied, setCopied] = useState(false)
@@ -32,25 +45,46 @@ export default function Footer() {
       
       <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="text-center">
-          <div 
-            onDoubleClick={handleDoubleClick}
-            className="flex items-center justify-center gap-2 mb-4 cursor-pointer"
-            title={language === 'vi' ? 'Double-click để copy' : 'Double-click to copy'}
-          >
-            <MessageCircle className="w-5 h-5 text-cyan-300 animate-pulse" />
-            <span className="text-cyan-100 select-all">
-              {t('contactBuy')}: <span className="font-semibold text-cyan-300 hover:text-cyan-200 transition-colors">
-                {copied ? (
-                  <span className="flex items-center gap-1 inline-flex">
-                    <Check className="w-4 h-4" />
-                    {discordUsername}
-                  </span>
-                ) : (
-                  discordUsername
-                )}
+          {/* Contact Section */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            {/* Discord Contact */}
+            <div 
+              onDoubleClick={handleDoubleClick}
+              className="flex items-center justify-center gap-2 cursor-pointer group"
+              title={language === 'vi' ? 'Double-click để copy' : 'Double-click to copy'}
+            >
+              <MessageCircle className="w-5 h-5 text-cyan-300 animate-pulse group-hover:text-cyan-200 transition-colors" />
+              <span className="text-cyan-100 select-all">
+                {t('contactBuy')}: <span className="font-semibold text-cyan-300 hover:text-cyan-200 transition-colors">
+                  {copied ? (
+                    <span className="flex items-center gap-1 inline-flex">
+                      <Check className="w-4 h-4" />
+                      {discordUsername}
+                    </span>
+                  ) : (
+                    discordUsername
+                  )}
+                </span>
               </span>
-            </span>
+            </div>
+
+            {/* Facebook Contact */}
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 cursor-pointer group hover:scale-105 transition-transform"
+              title={t('contactFacebook')}
+            >
+              <FacebookIcon className="w-5 h-5 text-blue-400 group-hover:text-blue-300 transition-colors" />
+              <span className="text-cyan-100">
+                {t('contactFacebook')}: <span className="font-semibold text-blue-300 group-hover:text-blue-200 transition-colors">
+                  Van Vu
+                </span>
+              </span>
+            </a>
           </div>
+
           <p className="text-cyan-200/80 text-sm">
             {t('footer.copyright')}
           </p>

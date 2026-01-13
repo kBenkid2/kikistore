@@ -9,6 +9,7 @@ export const translations = {
     heroSubtitle: 'Bán item, account các game',
     contactDiscord: 'Liên hệ qua Discord',
     contactBuy: 'Liên hệ mua hàng qua Discord',
+    contactFacebook: 'Liên hệ qua Facebook',
     noProducts: 'Chưa có sản phẩm nào. Vui lòng quay lại sau!',
     contactDiscordBtn: 'Contact',
     category: {
@@ -39,6 +40,7 @@ export const translations = {
     heroSubtitle: 'Sell items, accounts for games',
     contactDiscord: 'Contact via Discord',
     contactBuy: 'Contact to buy via Discord',
+    contactFacebook: 'Contact via Facebook',
     noProducts: 'No products available. Please come back later!',
     contactDiscordBtn: 'Contact',
     category: {

@@ -19,7 +19,7 @@ export default function Header() {
               Kiki StoreGame
             </span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4 sm:gap-6">
             <Link
               href="/"
               className="text-cyan-50 hover:text-white transition-colors relative group font-medium"
