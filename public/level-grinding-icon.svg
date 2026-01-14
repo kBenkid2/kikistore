@@ -1,0 +1,113 @@
+<svg 
+  viewBox="0 0 80 80" 
+  width="200" 
+  height="200"
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="lightningGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#60A5FA" />
+      <stop offset="50%" stopColor="#3B82F6" />
+      <stop offset="100%" stopColor="#2563EB" />
+    </linearGradient>
+    <linearGradient id="lightningGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FBBF24" />
+      <stop offset="100%" stopColor="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="wingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FFD700" />
+      <stop offset="50%" stopColor="#FFA500" />
+      <stop offset="100%" stopColor="#FF8C00" />
+    </linearGradient>
+    <linearGradient id="wingHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FFEB3B" />
+      <stop offset="100%" stopColor="#FFD700" />
+    </linearGradient>
+    <radialGradient id="glowGradient" cx="50%" cy="50%">
+      <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.5" />
+      <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background rectangle vÛi gradient -->
+  <rect width="80" height="80" rx="8" fill="url(#bgGradient)" />
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#4C1D95" />
+      <stop offset="50%" stopColor="#1E3A8A" />
+      <stop offset="100%" stopColor="#312E81" />
+    </linearGradient>
+  </defs>
+  
+  <!-- HiÇu éng ánh sáng të tia chÛp -->
+  <ellipse cx="38" cy="30" rx="15" ry="8" fill="url(#glowGradient)" opacity="0.3" />
+  
+  <!-- Tia chÛp phía sau - nhiÁu lÛp Ã t¡o hiÇu éng -->
+  <path 
+    d="M35 12 L42 32 L35 32 L40 52 L28 36 L35 36 L28 16 Z" 
+    fill="url(#lightningGradient1)" 
+    opacity="0.8"
+  />
+  <path 
+    d="M38 15 L43 30 L38 30 L41 45 L32 35 L38 35 L32 20 Z" 
+    fill="url(#lightningGradient2)" 
+    opacity="0.6"
+  />
+  
+  <!-- Boot - ph§n thân -->
+  <path 
+    d="M22 50 L22 62 L50 62 L50 58 L46 55 L42 52 L38 50 L34 48 L30 50 Z" 
+    fill="#6B4423" 
+    stroke="#4A2C1A" 
+    stroke-width="2"
+  />
+  
+  <!-- Boot - ph§n cÕ -->
+  <path 
+    d="M28 48 L36 45 L40 45 L48 48 L48 50 L28 50 Z" 
+    fill="#8B4513" 
+    stroke="#654321" 
+    stroke-width="1.5"
+  />
+  
+  <!-- Dây buÙc boot -->
+  <rect x="30" y="46" width="18" height="2" rx="1" fill="#4A2C1A" />
+  <rect x="32" y="44" width="14" height="2" rx="1" fill="#4A2C1A" />
+  
+  <!-- Cánh boot - lÛp chính -->
+  <path 
+    d="M28 48 Q22 35 18 28 Q24 32 30 38 Q32 36 34 34 Q36 32 38 34 Q40 36 42 38 Q48 32 54 28 Q50 35 44 48 Z" 
+    fill="url(#wingGradient)" 
+    stroke="#FFD700" 
+    stroke-width="1.5"
+    opacity="0.95"
+  />
+  
+  <!-- Cánh boot - lÛp highlight -->
+  <path 
+    d="M30 48 Q25 38 20 32 Q24 35 28 40 Q30 38 32 36 Q34 34 36 36 Q38 38 40 40 Q44 35 48 32 Q45 38 40 48 Z" 
+    fill="url(#wingHighlight)" 
+    opacity="0.6"
+  />
+  
+  <!-- Óng hÓ b¥m giÝ - vàng -->
+  <circle 
+    cx="58" 
+    cy="22" 
+    r="10" 
+    fill="#1a1a2e" 
+    stroke="#FFD700" 
+    stroke-width="2"
+  />
+  <circle cx="58" cy="22" r="2" fill="#FFD700" />
+  <!-- Kim giÝ -->
+  <line x1="58" y1="22" x2="58" y2="16" stroke="#FFD700" stroke-width="2" stroke-linecap="round" />
+  <!-- Kim phút -->
+  <line x1="58" y1="22" x2="64" y2="22" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Núm Óng hÓ -->
+  <circle cx="58" cy="14" r="1.5" fill="#FFD700" />
+  <circle cx="52" cy="22" r="1" fill="#FFD700" />
+  <circle cx="64" cy="22" r="1" fill="#FFD700" />
+</svg>

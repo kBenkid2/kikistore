@@ -64,7 +64,7 @@ async function handler(req: NextRequest) {
       price = sanitizePrice(price)
       
       // Validate category
-      const allowedCategories = ['ult', 'ring', 'account']
+      const allowedCategories = ['ult', 'ring', 'account', 'service']
       if (!allowedCategories.includes(category)) {
         return NextResponse.json(
           { error: 'Invalid category' },

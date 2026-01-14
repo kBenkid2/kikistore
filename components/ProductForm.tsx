@@ -28,6 +28,7 @@ const categories = [
   { value: 'ult', label: 'Ult' },
   { value: 'ring', label: 'Ring' },
   { value: 'account', label: 'Account' },
+  { value: 'service', label: 'Cày level / Service' },
 ]
 
 export default function ProductForm({ token, product, onSuccess, onCancel }: ProductFormProps) {

@@ -16,6 +16,7 @@ export const translations = {
       ult: 'Ult',
       ring: 'Ring',
       account: 'Account',
+      service: 'Cày level',
       item: 'Item', // Fallback for old data
     },
     status: {
@@ -47,6 +48,7 @@ export const translations = {
       ult: 'Ult',
       ring: 'Ring',
       account: 'Account',
+      service: 'Level Grinding',
       item: 'Item', // Fallback for old data
     },
     status: {

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
-import { Package, Gamepad2, Clock, CheckCircle2, XCircle, MessageCircle } from 'lucide-react'
+import { Package, Gamepad2, Clock, CheckCircle2, XCircle, MessageCircle, TrendingUp, Zap, Rocket, Timer } from 'lucide-react'
 import ImageModal from './ImageModal'
 import { useLanguage } from './LanguageProvider'
 import { getTranslation } from '@/lib/i18n'
@@ -25,9 +25,103 @@ interface ProductCardProps {
   product: Product
 }
 
+// Component icon - chỉ đồng hồ lớn
+function LevelGrindingIcon({ className }: { className?: string }) {
+  return (
+    <div className={`relative ${className} flex items-center justify-center`}>
+      {/* Background gradient đẹp */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/50 via-indigo-600/40 to-purple-800/50 rounded-lg"></div>
+      
+      {/* Icon chính - đồng hồ lớn */}
+      <div className="relative w-full h-full flex items-center justify-center p-6">
+        <svg 
+          viewBox="0 0 100 100" 
+          className="w-full h-full"
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="watchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFD700" />
+              <stop offset="50%" stopColor="#FFA500" />
+              <stop offset="100%" stopColor="#FF8C00" />
+            </linearGradient>
+          </defs>
+          
+          {/* Đồng hồ vàng lớn - chiếm phần lớn không gian */}
+          <circle 
+            cx="50" 
+            cy="50" 
+            r="35" 
+            fill="#1a1a2e" 
+            stroke="url(#watchGradient)" 
+            strokeWidth="4"
+            className="drop-shadow-lg"
+          />
+          
+          {/* Vòng trong đồng hồ */}
+          <circle 
+            cx="50" 
+            cy="50" 
+            r="30" 
+            fill="none" 
+            stroke="#FFD700" 
+            strokeWidth="1.5"
+            opacity="0.3"
+          />
+          
+          {/* Tâm đồng hồ */}
+          <circle cx="50" cy="50" r="4" fill="#FFD700" />
+          
+          {/* Kim giờ - chỉ lên trên (12 giờ) */}
+          <line 
+            x1="50" 
+            y1="50" 
+            x2="50" 
+            y2="25" 
+            stroke="#FFD700" 
+            strokeWidth="5" 
+            strokeLinecap="round"
+          />
+          
+          {/* Kim phút - chỉ sang phải (3 giờ) */}
+          <line 
+            x1="50" 
+            y1="50" 
+            x2="70" 
+            y2="50" 
+            stroke="#FFD700" 
+            strokeWidth="4" 
+            strokeLinecap="round"
+          />
+          
+          {/* Núm đồng hồ trên (12 giờ) */}
+          <circle cx="50" cy="15" r="3.5" fill="#FFD700" />
+          
+          {/* Núm đồng hồ dưới (6 giờ) */}
+          <circle cx="50" cy="85" r="3" fill="#FFD700" />
+          
+          {/* Núm đồng hồ trái (9 giờ) */}
+          <circle cx="15" cy="50" r="3" fill="#FFD700" />
+          
+          {/* Núm đồng hồ phải (3 giờ) */}
+          <circle cx="85" cy="50" r="3" fill="#FFD700" />
+          
+          {/* Các vạch số giờ */}
+          <line x1="50" y1="20" x2="50" y2="25" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" />
+          <line x1="50" y1="75" x2="50" y2="80" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" />
+          <line x1="20" y1="50" x2="25" y2="50" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" />
+          <line x1="75" y1="50" x2="80" y2="50" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </div>
+    </div>
+  )
+}
+
 const categoryIcons = {
   item: Package,
   account: Gamepad2,
+  service: Zap, // Icon tia chớp thể hiện tốc độ cày nhanh
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
@@ -36,7 +130,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [previewPosition, setPreviewPosition] = useState<{ top: number; left: number } | null>(null)
   const [mounted, setMounted] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
-  const Icon = categoryIcons[product.category as keyof typeof categoryIcons] || Package
+  const DefaultIcon = categoryIcons[product.category as keyof typeof categoryIcons] || Package
   const { language } = useLanguage()
   const t = (key: string) => getTranslation(language, key)
   const discordUsername = 'elainedna'
@@ -173,11 +267,19 @@ export default function ProductCard({ product }: ProductCardProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Icon className="w-12 h-12 text-cyan-600/50" />
+                {product.category === 'service' ? (
+                  <LevelGrindingIcon className="w-full h-full" />
+                ) : (
+                  <DefaultIcon className="w-12 h-12 text-cyan-600/50" />
+                )}
               </div>
             )}
             <div className="absolute top-1.5 left-1.5 z-10">
-              <span className="px-1.5 py-0.5 bg-cyan-600/80 backdrop-blur-sm rounded text-[10px] font-semibold text-white shadow-lg shadow-cyan-900/50">
+              <span className={`px-1.5 py-0.5 backdrop-blur-sm rounded text-[10px] font-semibold text-white shadow-lg ${
+                product.category === 'service' 
+                  ? 'bg-gradient-to-r from-purple-600/90 to-pink-600/90 shadow-purple-900/50 border border-purple-400/50' 
+                  : 'bg-cyan-600/80 shadow-cyan-900/50'
+              }`}>
                 {product.category === 'ult' ? 'Ult' : 
                  product.category === 'ring' ? 'Ring' : 
                  product.category === 'account' ? 'Account' : 
@@ -298,7 +400,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               sizes="288px"
             />
             <div className="absolute top-2 left-2">
-              <span className="px-2 py-1 bg-cyan-600/90 backdrop-blur-sm rounded text-xs font-semibold text-white shadow-lg">
+              <span className={`px-2 py-1 backdrop-blur-sm rounded text-xs font-semibold text-white shadow-lg ${
+                product.category === 'service' 
+                  ? 'bg-gradient-to-r from-purple-600/90 to-pink-600/90 shadow-purple-900/50 border border-purple-400/50' 
+                  : 'bg-cyan-600/90'
+              }`}>
                 {product.category === 'ult' ? 'Ult' : 
                  product.category === 'ring' ? 'Ring' : 
                  product.category === 'account' ? 'Account' : 

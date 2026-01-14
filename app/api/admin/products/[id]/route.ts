@@ -58,7 +58,7 @@ async function handler(
       
       // Validate category if provided
       if (category) {
-        const allowedCategories = ['ult', 'ring', 'account']
+        const allowedCategories = ['ult', 'ring', 'account', 'service']
         if (!allowedCategories.includes(category)) {
           return NextResponse.json(
             { error: 'Invalid category' },

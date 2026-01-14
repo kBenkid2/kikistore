@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "check": "node scripts/check-node.js",
-    "dev": "node scripts/check-setup.js && next dev",
+    "dev": "node scripts/dev.js",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
